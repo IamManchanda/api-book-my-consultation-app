@@ -1,0 +1,44 @@
+server:
+  port: 9191
+
+spring:
+  application:
+    name: BMC-GATEWAY
+  cloud:
+    gateway:
+      routes:
+        - id: APPOINTMENT-SERVICE
+          uri: lb://APPOINTMENT-SERVICE
+          predicates:
+            - Path=/appointments/**, /doctor/{doctorId}/availability/**, /users/{userId}/appointments/**, /prescriptions/**
+          order: 0
+
+        - id: DOCTOR-SERVICE
+          uri: lb://DOCTOR-SERVICE
+          predicates:
+            - Path=/doctors/**
+          order: 1
+
+        - id: USER-SERVICE
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/users/**
+          order: 2
+
+        - id: PAYMENT-SERVICE
+          uri: lb://PAYMENT-SERVICE
+          predicates:
+            - Path=/payments/**
+
+        - id: RATING-SERVICE
+          uri: lb://RATING-SERVICE
+          predicates:
+            - Path=/ratings/**
+
+        - id: SECURITY-PROVIDER
+          uri: lb://SECURITY-PROVIDER
+          predicates:
+            - Path=/foodDelivery/**
+
+    discovery:
+      enabled: true
